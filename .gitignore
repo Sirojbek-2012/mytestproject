@@ -1,2 +1,4 @@
-venv
-sirojbek_shaxsiy
+__pycache__/
+*.pyc
+*.env
+*.jpg   
