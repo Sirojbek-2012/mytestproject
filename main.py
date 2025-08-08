@@ -1,16 +1,33 @@
-# This is a sample Python script.
+from telegram import Update
+from telegram.ext import ApplicationBuilder, MessageHandler, CommandHandler, ContextTypes, filters
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+photos = {
+    "1": "1.jpg",
+    "2": "2.jpg",
+    "3": "3.jpg",
+    "4": "4.jpg",
+    "5": "5.jpg",
+    "6": "6.jpg",
+    "7": "7.jpg",
+    "8": "8.jpg",
+    "9": "9.jpg",
+    "10": "10.jpg",
+    "11": "11.jpg"
+}
 
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Bot ishlayapti. 1 dan 11 gacha raqam yuboring. men sizga rasm yuboraman")
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+async def send_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    text = update.message.text.strip()
+    if text in photos:
+        with open(photos[text], 'rb') as photo:
+            await update.message.reply_photo(photo)
+    else:
+        await update.message.reply_text("Iltimos, 1 dan 10 gacha bo‘lgan raqam yuboring.")
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('Hello world Siroj')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+app = ApplicationBuilder().token("7985769835:AAEA9BKjbobOdyb_8goV3IGPxpBmT2NtGbw").build()
+app.add_handler(CommandHandler("start", start))
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, send_photo))
+print("ishladi")
+app.run_polling()
