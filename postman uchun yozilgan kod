@@ -1,0 +1,44 @@
+import http from "http"
+
+const server = http.createServer((request, respose) => {
+    let obj = { "name": "bekzod uka", "age": "1" }
+    if (request.url === "/all/" && request.method === "GET") {
+        respose.statusCode = 200
+        respose.setHeader("Content-Type", "application/json")
+        respose.end(JSON.stringify(obj))
+    }
+    else if (request.url === "/ism/" && request.method === "GET") {
+        respose.statusCode = 200
+        respose.setHeader("Content-Type", "text/plain")
+        respose.end(obj.name)
+    }
+    else if (request.url === "/yosh/" && request.method === "GET") {
+        respose.statusCode = 200
+        respose.setHeader("Content-Type", "text/plain")
+        respose.end(obj.age)
+    }
+    else if (request.url === "/olish/" && request.method === "POST") {
+        let body = ""
+        request.on("data", (chunk) => {
+            console.log("chunki: ", chunk.toString());
+            body += chunk.toString()
+        })
+
+        request.on("end", ()=>{
+            console.log("malumot toliq qabul qilindi", body);
+            respose.statusCode = 200
+            respose.setHeader("Content-Type", "aplication/json")
+            respose.end(body)
+            
+        })
+    }
+        else {
+        respose.statusCode = 404
+        respose.end("no found")
+    }
+}
+)
+
+server.listen(3000, "0.0.0.0", () => {
+    console.log("server 3000 portda yurmoqda");
+})
